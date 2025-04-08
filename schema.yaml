@@ -1,0 +1,26 @@
+openapi: 3.0.0
+info:
+  title: Example API
+  version: 1.0.0
+components:
+  schemas:
+    UserId:
+      type: string
+      format: uuid
+      x-brand: user-id
+    User:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UserId"
+        name:
+          type: string
+      required:
+        - id
+        - name
+    TupleType:
+      type: array
+      items:
+        $ref: "#/components/schemas/UserId"
+      minItems: 1
+      maxItems: 2
