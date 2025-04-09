@@ -1,0 +1,136 @@
+openapi: 3.1.0
+info:
+    title: User Management API
+    version: 1.0.0
+    description: API for managing user accounts with secure ID handling
+jsonSchemaDialect: "https://org.com/schemas/dialect"
+servers:
+    - url: https://api.example.com/v1
+
+components:
+    schemas:
+        UserId:
+            type: string
+            format: uuid
+            title: "UserIdentifier"
+            description: "Unique identifier for a user account"
+            "org:brand": "user-id"
+
+        Email:
+            type: string
+            format: email
+            "org:brand": "email"
+
+        ISODate:
+            type: string
+            format: date-time
+            "org:brand": "iso-date"
+
+        PasswordPlainText:
+            type: string
+            format: password
+            minLength: 8
+            "org:brand": "password-plain-text"
+
+        User:
+            type: object
+            required:
+                - id
+                - email
+                - name
+                - createdAt
+            properties:
+                id:
+                    $ref: "#/components/schemas/UserId"
+                email:
+                    $ref: "#/components/schemas/Email"
+                createdAt:
+                    $ref: "#/components/schemas/ISODate"
+                name:
+                    type: string
+
+        OperationUserCreatePayload:
+            type: object
+            required:
+                - email
+                - password
+            properties:
+                email:
+                    $ref: "#/components/schemas/Email"
+                name:
+                    type: string
+                    minLength: 2
+                password:
+                    $ref: "#/components/schemas/PasswordPlainText"
+
+        ErrorInvalidInput:
+            type: object
+            required:
+                - code
+                - message
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+
+        ErrorUserNotFound:
+            type: object
+            required:
+                - code
+                - message
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+
+paths:
+    /users:
+        post:
+            summary: Create a new user
+            operationId: OperationUserCreate
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/OperationUserCreatePayload"
+            responses:
+                "201":
+                    description: User created successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/User"
+                "400":
+                    description: Invalid input
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorInvalidInput"
+    /users/{userId}:
+        get:
+            summary: Get user by ID
+            operationId: getUserById
+            parameters:
+                - name: userId
+                  in: path
+                  required: true
+                  schema:
+                      $ref: "#/components/schemas/UserId"
+            responses:
+                "200":
+                    description: User found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/User"
+                "404":
+                    description: User not found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorUserNotFound"
