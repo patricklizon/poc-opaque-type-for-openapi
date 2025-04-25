@@ -3,7 +3,7 @@ import fs from "node:fs";
 import ts from 'typescript';
 import path from 'node:path';
 
-const BRAND_TOKEN = 'org:brand';
+const BRAND_TOKEN = 'x-brand';
 
 /**
  * Custom transform function to convert ID fields to opaque types

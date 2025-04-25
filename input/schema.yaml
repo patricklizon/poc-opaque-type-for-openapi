@@ -14,23 +14,23 @@ components:
             format: uuid
             title: "UserIdentifier"
             description: "Unique identifier for a user account"
-            "org:brand": "user-id"
+            "x-brand": "user-id"
 
         Email:
             type: string
             format: email
-            "org:brand": "email"
+            "x-brand": "email"
 
         ISODate:
             type: string
             format: date-time
-            "org:brand": "iso-date"
+            "x-brand": "iso-date"
 
         PasswordPlainText:
             type: string
             format: password
             minLength: 8
-            "org:brand": "password-plain-text"
+            "x-brand": "password-plain-text"
 
         User:
             type: object
